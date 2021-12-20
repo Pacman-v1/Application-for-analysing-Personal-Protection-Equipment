@@ -1,7 +1,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="img/AWS Flowchart.jpg" width="80" height="80">
+<img src="img/AWS Flowchart.jpg">
 
 This application is designed implemented to analyse an image and detect Personal Protection Equipment (PPE) using AWS Rekognition (AI services).
 
