@@ -56,10 +56,18 @@ The Python application (Boto3) uploads images one after the other at 10 secs int
 * image_name is the S3 object(image) name
 
   ```sh 
-   response = client.create_queue( QueueName='queue-name', Attributes = {
-    'DelaySeconds': '60',
-    'MessageRetentionPeriod': '1209600'})
-   
+  if image_name is None:
+        image_name = file_path
+
+    # Upload the image
+    s3_client = boto3.client('s3')
+    bucket = "bucket-name"
+    try:
+        response = s3_client.upload_file(file_path, bucket, image_name)
+    except ClientError as e:
+        logging.error(e)
+        return False
+    print("File Successfully Uploaded")
   ```
 
 ## 3. PPE Detection with Rekognition
