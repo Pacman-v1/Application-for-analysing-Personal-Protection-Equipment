@@ -19,7 +19,7 @@ def upload_files(file_path, image_name=None):
 
     # Upload the image
     s3_client = boto3.client('s3')
-    bucket = "rekog-s3-cpd-s1903348"
+    bucket = "bucket-name"
     try:
         response = s3_client.upload_file(file_path, bucket, image_name)
     except ClientError as e:
