@@ -40,15 +40,36 @@ The Python application (Boto3) uploads images one after the other at 10 secs int
 * file_pat is the file to be uploaded
 * bucket is the name of the bucket to upload 
 * image_name is the S3 object(image) name
-
-* npm
+*
   ```sh
-  sns.publish(PhoneNumber = '+256000000000', Message = str(img))
+  for equipment_type in equipment:
+                        types = equipment_type["Type"]
+                        confidence = equipment_type["Confidence"]
+                        covers_body = equipment_type["CoversBodyPart"]["Value"]
+
+                        person_details = {
+                            "Confidence": confidence,
+                            "Cover Type": types,
+                        }
+                        covered = covers_body
   ```
 
 ## 3. PPE Detection with Rekognition
 
 The Lambda function code in Python (Boto3) extracts the relevant details such as image name etc. from the SQS message. The image details are then sent by the Lambda code to the AWS Rekognition service for detecting ‘face cover’ and ‘head cover’.
+
+```sh
+  for equipment_type in equipment:
+                        types = equipment_type["Type"]
+                        confidence = equipment_type["Confidence"]
+                        covers_body = equipment_type["CoversBodyPart"]["Value"]
+
+                        person_details = {
+                            "Confidence": confidence,
+                            "Cover Type": types,
+                        }
+                        covered = covers_body
+  ```
 
 ## 4. Database Updates and SMS Notification
 
