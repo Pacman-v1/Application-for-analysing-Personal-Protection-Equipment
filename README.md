@@ -43,7 +43,7 @@ The Python application (Boto3) uploads images one after the other at 10 secs int
 
 * npm
   ```sh
-  npm install npm@latest -g
+  sns.publish(PhoneNumber = '+256000000000', Message = str(img))
   ```
 
 ## 3. PPE Detection with Rekognition
@@ -55,5 +55,8 @@ The Lambda function code in Python (Boto3) extracts the relevant details such as
 The DynamoDB database has a single table with only a single partition (primary) key as the image name. From the Rekognition response (part 3 above), the Lambda function extracts relevant information and save true/false for the presence/absence of a face cover and a head cover together with the confidence level in the DynamoDB table.
 
 For responses indicating absence of a face mask, the Lambda function immediately notifies a given telephone number using SMS.
+```sh
+  sns.publish(PhoneNumber = '+256000000000', Message = str(img))
+  ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
