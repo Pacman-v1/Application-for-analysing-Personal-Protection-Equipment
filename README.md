@@ -34,24 +34,32 @@ Of course, its also important to discuass the security accesses used that will b
 
 The S3 bucket and SQS queue are created using the python cocde in the createS3Bucket file. The code sets the bucket_name and once successfullly created a statement indicating the bucket was successfully created is returned
 
+```sh
+   try:
+        if region is None:
+            s3_client = boto3.client('s3')
+            s3_client.create_bucket(Bucket=bucket_name)
+        else:
+            s3_client = boto3.client('s3')
+            s3_client.create_bucket(Bucket=bucket_name)
+    except ClientError as e:
+        logging.error(e)
+        return print("Creation not successful")
+    return print("The bucket " + bucket_name + " has been created successfully.")
+  ```
+
 ## 2. Image upload to S3 and Lambda trigger from SQS
 
 The Python application (Boto3) uploads images one after the other at 10 secs interval to the S3 bucket taking in three attributes
 * file_pat is the file to be uploaded
 * bucket is the name of the bucket to upload 
 * image_name is the S3 object(image) name
-*
-  ```sh
-  for equipment_type in equipment:
-                        types = equipment_type["Type"]
-                        confidence = equipment_type["Confidence"]
-                        covers_body = equipment_type["CoversBodyPart"]["Value"]
 
-                        person_details = {
-                            "Confidence": confidence,
-                            "Cover Type": types,
-                        }
-                        covered = covers_body
+  ```sh 
+   response = client.create_queue( QueueName='queue-name', Attributes = {
+    'DelaySeconds': '60',
+    'MessageRetentionPeriod': '1209600'})
+   
   ```
 
 ## 3. PPE Detection with Rekognition
