@@ -65,6 +65,6 @@ def lambda_handler(event, context):
                     table.put_item(Item={"img_name": img, 'Image Analysis': result})
 
                     #An SMS is sent to the phone number listed below
-                    sns.publish(PhoneNumber = '+256782434682', Message = str(img))
+                    sns.publish(PhoneNumber = '+256000000000', Message = str(img))
             
     return {"statusCode": 200}
