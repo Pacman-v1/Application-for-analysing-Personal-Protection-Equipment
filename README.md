@@ -30,119 +30,30 @@ Of course, its also important to discuass the security accesses used that will b
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## 1. Resource creation with Boto3
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+The S3 bucket and SQS queue are created using the python cocde in the createS3Bucket file. The code sets the bucket_name and once successfullly created a statement indicating the bucket was successfully created is returned
 
-### Prerequisites
+## 2. Image upload to S3 and Lambda trigger from SQS
 
-This is an example of how to list things you need to use the software and how to install them.
+The Python application (Boto3) uploads images one after the other at 10 secs interval to the S3 bucket taking in three attributes
+* file_pat is the file to be uploaded
+* bucket is the name of the bucket to upload 
+* image_name is the S3 object(image) name
+
 * npm
   ```sh
   npm install npm@latest -g
   ```
 
-### Installation
+## 3. PPE Detection with Rekognition
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+The Lambda function code in Python (Boto3) extracts the relevant details such as image name etc. from the SQS message. The image details are then sent by the Lambda code to the AWS Rekognition service for detecting ‘face cover’ and ‘head cover’.
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+## 4. Database Updates and SMS Notification
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+The DynamoDB database has a single table with only a single partition (primary) key as the image name. From the Rekognition response (part 3 above), the Lambda function extracts relevant information and save true/false for the presence/absence of a face cover and a head cover together with the confidence level in the DynamoDB table.
 
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+For responses indicating absence of a face mask, the Lambda function immediately notifies a given telephone number using SMS.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
